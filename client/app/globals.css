@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+@utility flex-center {
+  @apply flex justify-center items-center;
+}
+
+@utility flex-between {
+  @apply flex justify-between items-center;
+}
+@utility flex-around {
+  @apply flex justify-around items-center;
+}
+
+@utility flex-evenly {
+  @apply flex justify-evenly items-center;
+}
+
+@utility nav-links {
+  @apply flex gap-[5px] items-center text-[14px] text-white;
+}
+
+@utility labels {
+  @apply text-[13px] font-bold text-[#888];
+}
+
+/* in your globals.css or tailwind.css */
+.swiper-button-prev,
+.swiper-button-next {
+  width: 32px !important;
+  height: 32px !important;
+  color: #000; /* or whatever color */
+}
+

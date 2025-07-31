@@ -21,10 +21,9 @@ export const usersTable = pgTable("users", {
   email: varchar("email", { length: 255 }).notNull().unique(),
   image: text("image"),
   address: text("address"),
+  phoneNumber: text("phoneNumber"),
   location: text("location"),
-  accountNo: varchar("account_no", { length: 10 }),
-  accountName: text("accoun_tname"),
-  bankName: text("bank_name"),
+  bankAccount: varchar("bank_account", { length: 255 }),
   artisan: text("artisan"),
   createdAt: timestamp("created_at").defaultNow(),
 });

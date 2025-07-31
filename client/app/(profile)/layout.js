@@ -27,7 +27,7 @@ export default function RootLayout({ children }) {
       <html lang="en">
         <body className={`${merriweather.className} bg-[#f9fbe7]`}>
           <ProfileNav />
-          <div className="mt-[20px]">{children}</div>
+          <div className="mt-[5px] py-[20px] sm:px-[50px] px-[20px]">{children}</div>
         </body>
       </html>
     </ClerkProvider>

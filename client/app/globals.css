@@ -23,6 +23,13 @@
   @apply text-[13px] font-bold text-[#888];
 }
 
+@utility setting {
+  @apply w-full border-b border-b-[#000] flex-between sm:px-[20px] px-[10px] sm:h-[60px] h-[40px];
+}
+
+@utility detail {
+  @apply flex gap-[10px] items-center text-[12px] text-[#888];
+}
 /* in your globals.css or tailwind.css */
 .swiper-button-prev,
 .swiper-button-next {
@@ -30,4 +37,3 @@
   height: 32px !important;
   color: #000; /* or whatever color */
 }
-

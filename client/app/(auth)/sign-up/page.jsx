@@ -90,7 +90,7 @@ const SignUpPage = () => {
       if (complete.status === "complete") {
         await setActive({ session: complete.createdSessionId });
 
-        await fetch("/api/auth", {
+        await fetch("/api/user", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

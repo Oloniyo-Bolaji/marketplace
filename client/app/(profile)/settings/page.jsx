@@ -41,7 +41,7 @@ const page = () => {
   useEffect(() => {
     const getUserDetails = async () => {
       if (user?.user?.id) {
-        const res = await fetch(`/api/auth/${user?.user?.id}`);
+        const res = await fetch(`/api/user/${user?.user?.id}`);
         const result = await res.json();
         setUserDetails(result.data);
       }
@@ -65,7 +65,7 @@ const page = () => {
 
   const handleSubmit = async (inputValue) => {
     try {
-      const res = await fetch(`/api/auth/${user?.user?.id}/${propDetail}`, {
+      const res = await fetch(`/api/user/${user?.user?.id}/${propDetail}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

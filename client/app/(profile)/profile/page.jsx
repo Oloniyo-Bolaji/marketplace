@@ -11,7 +11,7 @@ const page = () => {
   useEffect(() => {
     const getprofileDetails = async () => {
       if (user?.user?.id) {
-        const res = await fetch(`/api/auth/${user?.user?.id}`);
+        const res = await fetch(`/api/user/${user?.user?.id}`);
         const result = await res.json();
         setProfileDetails(result.data);
         console.log(result.data);

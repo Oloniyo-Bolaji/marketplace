@@ -18,7 +18,6 @@ const Product = () => {
       const data = result.data;
 
       setProduct(data);
-      console.log(data);
     };
 
     fetchProduct();

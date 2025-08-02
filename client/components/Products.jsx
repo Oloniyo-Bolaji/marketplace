@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import ProductCard from "./ProductCard";
 import Categories from "./Categories";
 import { usePathname } from "next/navigation";
-import MultipleSelectCheckmarks from "@/ui-components/SelectForm";
+import BasicSelect from "@/ui-components/SelectForm";
 
 const Products = ({ title, products }) => {
   const pathname = usePathname();
@@ -21,6 +21,18 @@ const Products = ({ title, products }) => {
     setCategoryProducts(catProd);
   };
 
+  const handleSortChange = async (value) => {
+     const res = await fetch("/api/posts", {
+      cache: "no-store",
+    });
+    const result = await res.json();
+    const data = result.data;
+    if(value === "Newest"){
+     setCategoryProducts()
+    }
+    console.log("Selected sort option:", value);
+  };
+
   return (
     <section className="w-full">
       <div className="bg-[#fed16a] py-[5px] my-[10px]">
@@ -33,7 +45,9 @@ const Products = ({ title, products }) => {
           <div>
             <Categories handleCategoryClick={handleCategoryClick} />
           </div>
-          <div className="flex justify-end"><MultipleSelectCheckmarks /></div>
+          <div className="flex justify-end">
+            <BasicSelect />
+          </div>
         </div>
       )}
       <div className="w-full grid lg:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-[10px]">

@@ -10,6 +10,7 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 import Navbar from "@/components/Navbar";
+import { AppProvider } from "../context";
 
 const merriweather = Merriweather({
   weight: "400",
@@ -25,10 +26,12 @@ export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${merriweather.className}`}>
-          <Navbar />
-          <div className="mt-[20px]">{children}</div>
-        </body>
+        <AppProvider>
+          <body className={`${merriweather.className}`}>
+            <Navbar />
+            <div className="mt-[20px]">{children}</div>
+          </body>
+        </AppProvider>
       </html>
     </ClerkProvider>
   );

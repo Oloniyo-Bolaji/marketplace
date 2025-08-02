@@ -1,5 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
-import "../globals.css";
+import "./globals.css";
 import { Merriweather } from "next/font/google";
 import {
   ClerkProvider,
@@ -10,7 +10,7 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 import Navbar from "@/components/Navbar";
-import { AppProvider } from "../context";
+import { AppProvider } from "./context";
 
 const merriweather = Merriweather({
   weight: "400",

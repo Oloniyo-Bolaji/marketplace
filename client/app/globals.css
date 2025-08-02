@@ -30,10 +30,26 @@
 @utility detail {
   @apply flex gap-[10px] items-center text-[12px] text-[#888];
 }
-/* in your globals.css or tailwind.css */
-.swiper-button-prev,
-.swiper-button-next {
-  width: 32px !important;
-  height: 32px !important;
-  color: #000; /* or whatever color */
+
+@utility label {
+  @apply text-[14px] uppercase font-bold text-[#38664470];
+}
+
+@utility input {
+  @apply w-full h-[35px] text-[14px] p-[5px] rounded-[5px] inset-shadow-sm inset-shadow-[#38664440] outline-0 bg-white;
+}
+.swiper-button-next,
+.swiper-button-prev {
+  color: black !important;
+  font-size: 20px !important;
+  font-weight: bolder !important;
+  width: 40px;
+  height: 40px;
+  background-color: white;
+  border-radius: 50%;
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 20px !important;
 }

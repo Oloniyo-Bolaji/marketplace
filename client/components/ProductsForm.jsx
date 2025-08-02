@@ -8,6 +8,8 @@ import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { UploadButton, UploadDropzone } from "@uploadthing/react";
 import { useUser } from "@clerk/nextjs";
+import ImageUploader from "./ImageUploader";
+import Loading from "./Loading";
 
 const categoryEnum = z.enum([
   "Beauty",
@@ -37,6 +39,7 @@ const postSchema = z.object({
 });
 
 const page = ({ product }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const user = useUser();
   const router = useRouter();
   const {
@@ -72,11 +75,12 @@ const page = ({ product }) => {
       alert("Please log in to post a product");
       return;
     }
-    if(!data.images || data.images.length === 0){
-      alert("Please add at least one image to post a product");
+    if (!data.images || data.images.length === 0) {
+      alert("Please add at least one image to post a product, Click on upload images button");
       return;
     }
     console.log(data);
+    setIsLoading(true);
     try {
       const res = await fetch(product ? `/api/posts/${id}` : "/api/posts/new", {
         method: product ? "PUT" : "POST",
@@ -89,6 +93,7 @@ const page = ({ product }) => {
       console.log(res);
       const result = await res.json();
       if (result.success) {
+        setIsLoading(true);
         alert(product ? "post edited" : "posted successfully!");
         router.push("/");
       } else {
@@ -101,41 +106,39 @@ const page = ({ product }) => {
   };
 
   return (
-    <div>
+    <div className="py-[10px]">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="w-full p-[5px] flex flex-col gap-[5px]">
-          <label className="text-[16px]">Product Title</label>
+        <div className="w-full flex flex-col gap-[5px]">
+          <label className="label">Product Title</label>
           <input
-            className="w-full h-[35px] text-[14px] p-[5px] rounded-[5px] border border-[#ccc] outline-0 bg-white"
+            className="w-full h-[35px] text-[14px] p-[5px] rounded-[5px] inset-shadow-sm inset-shadow-[#38664440] outline-0 bg-white"
             {...register("title")}
           />
           <p className="text-[red] text-[12px]">{errors.title?.message}</p>
         </div>
-        <div className="w-full p-[5px] flex flex-col gap-[5px]">
-          <label className="text-[16px]">Price</label>
+        <div className="w-full flex flex-col gap-[5px]">
+          <label className="label">Price</label>
           <input
-            className="w-full h-[35px] text-[14px] p-[5px] rounded-[5px] border border-[#ccc] outline-0 bg-white"
+            className="input placeholder:text-[13px]"
             {...register("price")}
+            placeholder="Price in naira"
           />
           <p className="text-[red] text-[12px]">{errors.price?.message}</p>
         </div>
-        <div className="w-full p-[5px] flex flex-col gap-[5px]">
-          <label className="text-[16px]">Product Description</label>
+        <div className="w-full flex flex-col gap-[5px]">
+          <label className="label">Product Description</label>
           <textarea
-            className="w-full h-[35px] text-[14px] p-[5px] rounded-[5px] border border-[#ccc] outline-0 bg-white"
+            className="input sm:h-[150px] h-[100px]"
             {...register("description")}
           />
           <p className="text-[red] text-[12px]">
             {errors.description?.message}
           </p>
         </div>
-        <div className="w-full p-[5px] flex flex-col gap-[5px]">
-          <label className="text-[16px]">Category</label>
-          <select
-            {...register("category")}
-            className="bg-[white] w-full h-[35px] text-[14px] p-[5px] rounded-[10px] outline-[0] border-[1px] border-solid border-[#ccc]"
-          >
-            <option>Select Category</option>
+        <div className="w-full flex flex-col gap-[5px]">
+          <label className="label">Category</label>
+          <select {...register("category")} className="input">
+            <option>-- Select Category --</option>
             {categoryEnum.options.map((opt) => (
               <option key={opt} value={opt}>
                 {opt}
@@ -144,17 +147,21 @@ const page = ({ product }) => {
           </select>
           <p className="text-[red] text-[12px]">{errors.category?.message}</p>
         </div>
-        <select
-          className="w-full h-[35px] text-[14px] p-[5px] rounded-[5px] border border-[#ccc] outline-0 bg-white"
-          {...register("status", { valueAsNumber: false })}
-        >
-          <option value="">-- Select Status --</option>
-          <option value="true">In Stock</option>
-          <option value="false">Out of Stock</option>
-        </select>
-        <div className="w-full p-[5px] flex flex-col gap-[5px] text-black">
-          <label className="text-[16px]">Images</label>
-          <UploadButton
+        <div className="w-full flex flex-col gap-[5px]">
+          <label className="label">Status</label>
+          <select
+            className="input"
+            {...register("status", { valueAsNumber: false })}
+          >
+            <option value="">-- Select Status --</option>
+            <option value="true">In Stock</option>
+            <option value="false">Out of Stock</option>
+          </select>
+          <p className="text-[red] text-[12px]">{errors.status?.message}</p>
+        </div>
+        <div className="w-full flex flex-col gap-[5px]">
+          <label className="label">Images</label>
+          {/*<UploadButton
             endpoint="imageUploader"
             onClientUploadComplete={(res) => {
               const urls = res.map((file) => file.ufsUrl);
@@ -167,7 +174,7 @@ const page = ({ product }) => {
             }}
             appearance={{
               button: {
-                backgroundColor: "#af7ac5",
+                backgroundColor: "#f97a00",
                 color: "#fff",
                 padding: "8px 16px",
                 fontSize: "14px",
@@ -188,14 +195,15 @@ const page = ({ product }) => {
                 color: "#666",
               },
             }}
-          />
+          />*/}
+          <ImageUploader setValue={setValue} errors={errors} />
           <p className="text-[red] text-[12px]">{errors.images?.message}</p>
         </div>
         <button
           type="submit"
-          className="mt-4 w-full bg-[#af7ac5] text-white py-2 rounded  text-[13px]"
+          className="bg-[#f97a00] hover:border-[#f97a00] hover:text-[#f97a00] hover:bg-white transition duration-300 text-white font-medium px-6 py-2 rounded-md shadow-md mx-auto block text-sm"
         >
-          Post
+          {isLoading ? <Loading />: product ? "Update Product" : "Post Product"}
         </button>
       </form>
     </div>

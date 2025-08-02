@@ -25,7 +25,7 @@ export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${merriweather.className} bg-[#f9fbe7]`}>
+        <body className={`${merriweather.className}`}>
           <Navbar />
           <div className="mt-[20px]">{children}</div>
         </body>

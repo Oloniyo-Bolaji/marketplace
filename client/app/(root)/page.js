@@ -6,7 +6,6 @@ import Products from "@/components/Products";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-
 const Home = () => {
   const category = [
     "Beauty",
@@ -37,7 +36,7 @@ const Home = () => {
         const createdAt = new Date(d.createdAt);
         return now - createdAt <= twoHoursInMs;
       });
-      console.log(newproducts)
+      console.log(newproducts);
       setNewPosts(newproducts);
     };
 
@@ -70,7 +69,7 @@ const Home = () => {
           </div>
         </div>
         <div className="w-[75%] p-[10px]">
-          <div className="rounded-[15px] w-full bg-[#af7ac580] h-full flex items-center justify-center">
+          <div className="rounded-[15px] w-full bg-[#fed16a] h-full flex items-center justify-center">
             <h3>
               No 1 place to buy and sell your products and meet artisans close
               to you. Buy & Sell Anything Easily.
@@ -82,14 +81,9 @@ const Home = () => {
       <Announcement />
       <main className="p-[30px] flex flex-col gap-[20px]">
         {/**New products */}
-        {newPosts.length > 0 && <Products title="What's new" products={newPosts} />}
-        {/**categories */}
-        <section>
-          <h3 className=" font-bold uppercase my-[10px]">Categories</h3>
-          <div className="">
-            <Categories />
-          </div>
-        </section>
+        {newPosts.length > 0 && (
+          <Products title="What's new" products={newPosts} />
+        )}
         {/**Available product that are no longer new */}
         <Products title="Available Products" products={availablePosts} />
       </main>

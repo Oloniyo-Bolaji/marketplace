@@ -2,17 +2,17 @@
 
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
-import "swiper/css/navigation";
-
+import { Navigation } from "swiper/modules";
 import "swiper/css";
+import "swiper/css/navigation";
 import Image from "next/image";
+
 const Product = ({ product }) => {
   return (
-    <div className="flex gap-[20px]">
-      {/**Images and description */}
-      <div>
-        <div className="w-[300px] bg-[yellow]">
+    <div className="flex gap-[20px] sm:flex-row flex-col sm:px-[50px] px-[30px] py-[10px]">
+      {/* Images and description */}
+      <div className="w-full sm:w-[40%] flex flex-col gap-[20px]">
+        <div className="w-full">
           <Swiper
             className="mySwiper"
             modules={[Navigation]}
@@ -22,26 +22,32 @@ const Product = ({ product }) => {
             onSlideChange={() => console.log("slide change")}
             onSwiper={(swiper) => console.log(swiper)}
           >
-            {product.images?.map((image, index) => {
-              return (
-                <SwiperSlide>
+            {product.images?.map((image, index) => (
+              <SwiperSlide key={index}>
+                <div className="relative w-[300px] sm:w-[400px] h-[300px] sm:h-[400px] rounded-[10px] overflow-hidden mx-auto">
                   <Image
                     src={image}
                     alt="product image"
-                    width={100}
-                    height={100}
+                    fill
+                    className="object-cover"
                   />
-                </SwiperSlide>
-              );
-            })}
+                </div>
+              </SwiperSlide>
+            ))}
           </Swiper>
         </div>
+
         <div>
-          <h2>{product.title}</h2>
-          <p>{product.description}</p>
+          <h2 className="uppercase text-[#386641] text-[15px] font-bold">
+            {product.title}
+          </h2>
+          <p className="text-[#38664170] text-[12px] text-justify">
+            {product.description}
+          </p>
         </div>
       </div>
-      {/**Other information */}
+
+      {/* Other information */}
       <div>
         <div>
           <h2>&#8358;{product.price}</h2>

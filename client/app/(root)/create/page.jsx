@@ -8,7 +8,8 @@ import ProductsForm from "@/components/ProductsForm";
 
 const page = () => {
   return (
-    <div>
+    <div className="py-[10px] sm:px-[100px] px-[30px]">
+      <h2 className="text-center uppercase text-[#386644] text-[13px]">Post your product for sale</h2>
       <ProductsForm />
     </div>
   );

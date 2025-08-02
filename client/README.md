@@ -13,7 +13,13 @@ pnpm dev
 # or
 bun dev
 ```
+product/10f2ace5-797f-450b-ac47-0aae2e36de02
+const sortType = [
+"Newest",
+"Price: Low to High",
+"Price: High to High",
 
+];
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.

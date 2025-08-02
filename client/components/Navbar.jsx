@@ -5,80 +5,92 @@ import React from "react";
 import { LuMessageCircleMore, LuMessageSquareMore } from "react-icons/lu";
 import { FaCartArrowDown, FaShoppingCart, FaUserAlt } from "react-icons/fa";
 import { CiSearch } from "react-icons/ci";
-import { useUser, SignOutButton } from "@clerk/nextjs";
+import { useUser, SignOutButton, SignedIn, SignedOut } from "@clerk/nextjs";
 import { FaMessage } from "react-icons/fa6";
 import Image from "next/image";
 import Badge from "@mui/material/Badge";
+import { Pacifico } from "next/font/google";
+import IconBadge from "@/ui-components/IconBadge";
+import { FaShop } from "react-icons/fa6";
+import { MdBuild } from "react-icons/md";
+import IconTooltip from "@/ui-components/IconTooltip";
+
+const pacifico = Pacifico({
+  weight: "400",
+  subsets: ["latin"],
+});
 
 const Navbar = () => {
   const user = useUser();
   console.log(user);
   return (
-    <nav className="w-full h-[70px] flex flex-col">
-      <div className="flex justify-between items-center bg-[#10b981] h-[60%] p-[30px]">
-        <div className="relative w-[350px] max-w-md">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="w-full bg-white placeholder:text-[13px] pr-10 pl-4 py-[5px] rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 "
-          />
-          <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-bold">
-            <CiSearch size={20} />
-          </span>
-        </div>
-        <div>
-          <h1 className="font-bold text-[#f97316]">MarketPlace</h1>
-        </div>
-        <div className="flex items-center gap-[10px]">
-          {user.isSignedIn ? (
-            <Link href="/profile">
-              <Image
-                src={user.user.imageUrl}
-                alt="user Logo"
-                width={25}
-                height={25}
-                className="rounded-full bg-inherit"
-              />
-            </Link>
-          ) : (
-            <Link href="/sign-up" className="nav-links">
-              <span>
-                <FaUserAlt className="w-[15px] h-[15px] text-white" />
-              </span>
-            </Link>
-          )}
-
-          <Link
-            href="/"
-            className="relative inline-flex items-center justify-center w-8 h-8"
-          >
-            <Badge badgeContent={4} color="secondary">
-              <FaCartArrowDown color="action" />
-            </Badge>
-          </Link>
-
-          <Link
-            href="/"
-            className="relative inline-flex items-center justify-center w-8 h-8"
-          >
-            <Badge color="secondary" variant="dot">
-              <FaMessage color="action" />
-            </Badge>
-          </Link>
-        </div>
+    <nav className="w-full h-[50px] flex justify-between items-center bg-[#386644] p-[30px]">
+      <div>
+        <Link
+          href="/"
+          className={`${pacifico.className} font-bold text-[#f97a00]`}
+        >
+          MarketPlace
+        </Link>
       </div>
+      <div className="relative w-[350px] max-w-md sm:block hidden">
+        <input
+          type="text"
+          placeholder="Search..."
+          className="w-full bg-white placeholder:text-[13px] pr-10 pl-4 py-[5px] rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 "
+        />
+        <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-bold">
+          <CiSearch size={20} />
+        </span>
+      </div>
+      <div className="flex items-center gap-4">
+        <IconTooltip
+          title="Explore"
+          icon={
+            <FaShop className="w-5 h-5 text-white hover:text-orange-400 transition-colors duration-200" />
+          }
+          link="/explore"
+        />
 
-      <div className="flex-evenly bg-[#10b98140] h-[40%] py-[5px]">
-        <Link href="/">
-          <span className=" text-[15px] text-[#2563eb] font-bold">
-            BUY/SELL
-          </span>
-        </Link>
-        <Link href="/">
-          <span className=" text-[15px]  text-[#facc15] font-bold">
-            ARTISANS
-          </span>
-        </Link>
+        <IconTooltip
+          title="Artisans"
+          icon={
+            <MdBuild className="w-5 h-5 text-white hover:text-orange-400 transition-colors duration-200" />
+          }
+          link="/"
+        />
+
+        <IconBadge
+          title="Orders"
+          icon={
+            <FaMessage className="w-5 h-5 text-white hover:text-orange-400 transition-colors duration-200" />
+          }
+          link="/"
+        />
+
+        <SignedIn>
+          <Link
+            href="/profile"
+            className="block"
+          >
+            <Image
+              src={user.user?.imageUrl}
+              alt="User profile"
+              width={30}
+              height={30}
+              className="rounded-full"
+            />
+          </Link>
+        </SignedIn>
+
+        <SignedOut>
+          <Link
+            href="/sign-up"
+            className="text-white hover:text-orange-400 transition-colors duration-200"
+          >
+            <FaUserAlt className="w-5 h-5" />
+          </Link>
+        </SignedOut>
       </div>
     </nav>
   );

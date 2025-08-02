@@ -5,7 +5,7 @@ import React from "react";
 
 const Announcement = () => {
   return (
-    <div className="mt-[10px] py-[5px] bg-[brown]">
+    <div className="mt-[10px] py-[10px] bg-[#fed16a] text-[13px]">
       <Marquee>
         I can be a React component, multiple React components, or just some
         text. This will be used for announcement by admin and can or cannt show

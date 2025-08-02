@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
@@ -9,7 +9,7 @@ import React from "react";
 const IconTooltip = ({ title, icon, link }) => {
   return (
     <Link href={link}>
-      <Tooltip title={title}>
+      <Tooltip title={title} sx={{ fontSize: "20px", color: "#f97a00" }}>
         <IconButton>{icon}</IconButton>
       </Tooltip>
     </Link>

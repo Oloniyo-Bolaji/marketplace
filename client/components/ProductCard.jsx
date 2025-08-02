@@ -13,6 +13,7 @@ const ProductCard = ({ product }) => {
           src={product.images[0]}
           alt={product.title}
           fill
+          priority
           className="object-cover"
         />}
       </div>
@@ -24,15 +25,15 @@ const ProductCard = ({ product }) => {
             : product.description}
         </p>*/}
       </div>
-      <div className="flex justify-between items-center">
-        <h3 className="font-bold text-[14px] text-[#af7ac5]">
+      <div className="flex sm:flex-row sm:justify-between sm:items-center flex-col gap-[10px]">
+        <h3 className="font-bold text-[14px] text-[#f97a00]">
           &#8358;{product.price}
         </h3>
         <button
           onClick={() => router.push(`product/${product.id}`)}
-          className="text-[12px] border border-solid border-[#af7ac5] p-[5px] rounded-[10px] bg-[purple] text-[white]"
+          className="text-[12px] border border-[#386641] border-solid p-[5px] rounded-[5px] text-[#386641]"
         >
-          Show Details
+          Preview
         </button>
       </div>
     </div>

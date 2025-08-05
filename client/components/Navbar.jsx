@@ -14,6 +14,7 @@ import IconBadge from "@/ui-components/IconBadge";
 import { FaShop } from "react-icons/fa6";
 import { MdBuild } from "react-icons/md";
 import IconTooltip from "@/ui-components/IconTooltip";
+import { usePathname } from "next/navigation";
 
 const pacifico = Pacifico({
   weight: "400",
@@ -21,8 +22,9 @@ const pacifico = Pacifico({
 });
 
 const Navbar = () => {
+  const pathname = usePathname();
   const user = useUser();
-  console.log(user);
+
   return (
     <nav className="w-full h-[50px] flex justify-between items-center bg-[#386644] p-[30px]">
       <div>
@@ -33,16 +35,18 @@ const Navbar = () => {
           MarketPlace
         </Link>
       </div>
-      <div className="relative w-[350px] max-w-md sm:block hidden">
-        <input
-          type="text"
-          placeholder="Search..."
-          className="w-full bg-white placeholder:text-[13px] pr-10 pl-4 py-[5px] rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 "
-        />
-        <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-bold">
-          <CiSearch size={20} />
-        </span>
-      </div>
+      {pathname === "/explore" && (
+        <div className="relative w-[350px] max-w-md sm:block hidden">
+          <input
+            type="text"
+            placeholder="Search..."
+            className="w-full bg-white placeholder:text-[13px] pr-10 pl-4 py-[5px] rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 "
+          />
+          <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-bold">
+            <CiSearch size={20} />
+          </span>
+        </div>
+      )}
       <div className="flex items-center gap-4">
         <IconTooltip
           title="Explore"
@@ -57,22 +61,18 @@ const Navbar = () => {
           icon={
             <MdBuild className="w-5 h-5 text-white hover:text-orange-400 transition-colors duration-200" />
           }
-          link="/"
+          link="/artisans"
         />
-
-        <IconBadge
-          title="Orders"
-          icon={
-            <FaMessage className="w-5 h-5 text-white hover:text-orange-400 transition-colors duration-200" />
-          }
-          link="/"
-        />
-
+        
         <SignedIn>
-          <Link
-            href="/profile"
-            className="block"
-          >
+          <IconBadge
+            title="Orders"
+            icon={
+              <FaMessage className="w-5 h-5 text-white hover:text-orange-400 transition-colors duration-200" />
+            }
+            link="/orders"
+          />
+          <Link href="/profile" className="block">
             <Image
               src={user.user?.imageUrl}
               alt="User profile"

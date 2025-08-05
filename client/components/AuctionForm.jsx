@@ -11,19 +11,7 @@ import { useUser } from "@clerk/nextjs";
 import ImageUploader from "./ImageUploader";
 import Loading from "./Loading";
 
-const categoryEnum = z.enum([
-  "Beauty",
-  "Furniture",
-  "Electrical Appliances",
-  "Fashion Accessories",
-  "Tools & Equipments",
-  "Computers & Accessories",
-  "Agriculture & Food",
-  "Education & Office",
-  "Miscellaneous",
-]);
-
-const postSchema = z.object({
+const auctionSchema = z.object({
   title: z.string().min(1, "Product title is required"),
   price: z.string().min(1, "Price must be at least 1"),
   description: z.string().min(1, "Description is required"),
@@ -31,14 +19,21 @@ const postSchema = z.object({
     .array(z.string())
     .min(1, "At least one image is required")
     .default([]),
-  category: categoryEnum,
+  startTime: z
+    .string()
+    .min(1, "Start time is required")
+    .refine((val) => !isNaN(Date.parse(val)), "Invalid date and time format"),
+  durationMinutes: z
+    .number()
+    .min(1, "Duration must be at least 1 minute")
+    .max(10080, "Duration must be less than 7 days"),
   status: z
     .enum(["true", "false"])
     .transform((val) => val === "true")
     .default("false"),
 });
 
-const page = ({ product }) => {
+const AuctionFormPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const user = useUser();
   const router = useRouter();
@@ -50,21 +45,8 @@ const page = ({ product }) => {
     reset,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(postSchema),
+    resolver: zodResolver(auctionSchema),
   });
-
-  useEffect(() => {
-    if (product) {
-      reset({
-        title: product.title,
-        price: product.price,
-        description: product.description,
-        images: product.images,
-        category: product.category,
-        status: product.status,
-      });
-    }
-  }, [product, reset]);
 
   const onSubmit = async (data) => {
     if (!user.isSignedIn) {
@@ -72,30 +54,31 @@ const page = ({ product }) => {
       return;
     }
     if (!data.images || data.images.length === 0) {
-      alert("Please add at least one image to post a product, Click on upload images button");
+      alert(
+        "Please add at least one image to post a product, Click on upload images button"
+      );
       return;
     }
-    console.log(data);
     setIsLoading(true);
     try {
-      const res = await fetch(product ? `/api/posts/${id}` : "/api/posts/new", {
-        method: product ? "PUT" : "POST",
+      const res = await fetch("/api/auctions/new", {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           data,
           sellerId: user.user.id,
         }),
       });
-      console.log(res);
       const result = await res.json();
       if (result.success) {
         setIsLoading(true);
-        alert(product ? "post edited" : "posted successfully!");
+        alert("posted successfully!");
         router.push("/");
       } else {
         throw new Error(result.error || "Something went wrong");
       }
     } catch (err) {
+      setIsLoading(false);
       console.error("Application Error:", err);
       alert("Error submitting application");
     }
@@ -113,7 +96,7 @@ const page = ({ product }) => {
           <p className="text-[red] text-[12px]">{errors.title?.message}</p>
         </div>
         <div className="w-full flex flex-col gap-[5px]">
-          <label className="label">Price</label>
+          <label className="label">Start Price</label>
           <input
             className="input placeholder:text-[13px]"
             {...register("price")}
@@ -132,66 +115,27 @@ const page = ({ product }) => {
           </p>
         </div>
         <div className="w-full flex flex-col gap-[5px]">
-          <label className="label">Category</label>
-          <select {...register("category")} className="input">
-            <option>-- Select Category --</option>
-            {categoryEnum.options.map((opt) => (
-              <option key={opt} value={opt}>
-                {opt}
-              </option>
-            ))}
-          </select>
-          <p className="text-[red] text-[12px]">{errors.category?.message}</p>
+          <label className="label">Start Time</label>
+          <input
+            type="datetime-local"
+            className="input placeholder:text-[13px]"
+            {...register("startTime")}
+          />
+          <p className="text-[red] text-[12px]">{errors.startTime?.message}</p>
         </div>
         <div className="w-full flex flex-col gap-[5px]">
-          <label className="label">Status</label>
-          <select
-            className="input"
-            {...register("status", { valueAsNumber: false })}
-          >
-            <option value="">-- Select Status --</option>
-            <option value="true">In Stock</option>
-            <option value="false">Out of Stock</option>
-          </select>
-          <p className="text-[red] text-[12px]">{errors.status?.message}</p>
+          <label className="label">Durations</label>
+          <input
+            className="input placeholder:text-[13px]"
+            {...register("durationMinutes", { valueAsNumber: true })}
+            placeholder="Duration in minutes"
+          />
+          <p className="text-[red] text-[12px]">
+            {errors.durationMinutes?.message}
+          </p>
         </div>
         <div className="w-full flex flex-col gap-[5px]">
           <label className="label">Images</label>
-          {/*<UploadButton
-            endpoint="imageUploader"
-            onClientUploadComplete={(res) => {
-              const urls = res.map((file) => file.ufsUrl);
-              setValue("images", urls);
-              console.log("Uploaded URLs: ", urls);
-              alert("Upload Completed");
-            }}
-            onUploadError={(error) => {
-              alert(`ERROR! ${error.message}`);
-            }}
-            appearance={{
-              button: {
-                backgroundColor: "#f97a00",
-                color: "#fff",
-                padding: "8px 16px",
-                fontSize: "14px",
-                borderRadius: "8px",
-                border: "none",
-                cursor: "pointer",
-              },
-              container: {
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: "10px",
-                padding: "10px 0",
-              },
-              allowedContent: {
-                display: "none",
-                fontSize: "12px",
-                color: "#666",
-              },
-            }}
-          />*/}
           <ImageUploader setValue={setValue} errors={errors} />
           <p className="text-[red] text-[12px]">{errors.images?.message}</p>
         </div>
@@ -199,11 +143,11 @@ const page = ({ product }) => {
           type="submit"
           className="bg-[#f97a00] hover:border-[#f97a00] hover:text-[#f97a00] hover:bg-white transition duration-300 text-white font-medium px-6 py-2 rounded-md shadow-md mx-auto block text-sm"
         >
-          {isLoading ? <Loading />: product ? "Update Product" : "Post Product"}
+          {isLoading ? <Loading /> : "Post"}
         </button>
       </form>
     </div>
   );
 };
 
-export default page;
+export default AuctionFormPage;

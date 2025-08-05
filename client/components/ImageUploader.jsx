@@ -10,15 +10,20 @@ import {
 
 const ImageUploader = ({ setValue, errors }) => {
   const [files, setFiles] = useState([]);
+  const [isUploading, setIsUploading] = useState(false);
+  const [isUploaded, setIsUploaded] = useState(false);
 
   const { startUpload, routeConfig } = useUploadThing("imageUploader", {
     onClientUploadComplete: (res) => {
       const urls = res.map((f) => f.ufsUrl);
       setValue("images", urls);
-      alert("Upload completed");
+      setIsUploading(false);
+      setIsUploaded(true); 
     },
     onUploadError: (e) => {
       alert("Error: " + e.message);
+      setIsUploading(false);
+      setIsUploaded(false);
     },
   });
 
@@ -34,8 +39,13 @@ const ImageUploader = ({ setValue, errors }) => {
     multiple: true,
   });
 
+  const handleUpload = async () => {
+    setIsUploading(true); 
+    await startUpload(files);
+  };
+
   return (
-    <div className="">
+    <div>
       <div
         {...getRootProps()}
         className="inset-shadow-sm inset-shadow-[#38664440] outline-0 bg-white rounded-[5px] p-4 text-center cursor-pointer"
@@ -44,18 +54,28 @@ const ImageUploader = ({ setValue, errors }) => {
         <p className="text-sm text-[#ccc]">
           Click or drag images here to upload
         </p>
+      </div>
+      <div className="flex-center">
         {files.length > 0 && (
           <button
             type="button"
-            onClick={() => startUpload(files)}
-            className="mt-2 bg-[#f97a00] text-white text-[12px] px-4 py-[5px] rounded  transition"
+            onClick={handleUpload}
+            disabled={isUploading || isUploaded}
+            className={`mt-2 text-white text-[12px] px-4 py-[5px] rounded transition ${
+              isUploading || isUploaded
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-[#f97a00] hover:bg-[#e46a00]"
+            }`}
           >
-            Upload {files.length} image{files.length > 1 ? "s" : ""}
+            {isUploading
+              ? "Uploading..."
+              : isUploaded
+              ? "Uploaded"
+              : `Upload ${files.length} image${files.length > 1 ? "s" : ""}`}
           </button>
         )}
       </div>
-
-      <p className="text-[red] text-[12px]">{errors.images?.message}</p>
+      <p className="text-[red] text-[12px]">{errors?.images?.message}</p>
     </div>
   );
 };

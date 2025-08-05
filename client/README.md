@@ -20,6 +20,61 @@ const sortType = [
 "Price: High to High",
 
 ];
+
+ useEffect(() => {
+    if (product) {
+      reset({
+        title: product.title,
+        price: product.price,
+        description: product.description,
+        images: product.images,
+        category: product.category,
+        status: product.status,
+      });
+    }
+  }, [product, reset]);
+
+  const handleImageUploadSuccess = (urls) => {
+    setValue("images", urls);
+  };
+
+  const onSubmit = async (data) => {
+    if (!user.isSignedIn) {
+      alert("Please log in to post a product");
+      return;
+    }
+    if (!data.images || data.images.length === 0) {
+      alert(
+        "Please add at least one image to post a product, Click on upload images button"
+      );
+      return;
+    }
+    console.log(data);
+    setIsLoading(true);
+    try {
+      const res = await fetch(product ? `/api/posts/${id}` : "/api/posts/new", {
+        method: product ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          data,
+          sellerId: user.user.id,
+        }),
+      });
+      console.log(res);
+      const result = await res.json();
+      if (result.success) {
+        setIsLoading(true);
+        alert(product ? "post edited" : "posted successfully!");
+        router.push("/");
+      } else {
+        throw new Error(result.error || "Something went wrong");
+      }
+    } catch (err) {
+      console.error("Application Error:", err);
+      alert("Error submitting application");
+    }
+  };
+  
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.

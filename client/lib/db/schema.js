@@ -44,8 +44,38 @@ export const postsTable = pgTable("posts", {
     .references(() => usersTable.id),
 });
 
+export const auctionsTable = pgTable("auctions", {
+  id: uuid("id").defaultRandom().primaryKey().notNull(),
+  title: varchar("title", { length: 255 }).notNull(),
+  price: varchar("price").notNull(),
+  bidPrice: varchar("bidPrice"),
+  startTime: timestamp("start_time").notNull(),
+  durationMinutes: integer("duration_minutes").notNull(),
+  description: varchar("description", { length: 1000 }).notNull(),
+  images: jsonb("images").notNull(),
+  status: boolean("status").default(false),
+  updatedAt: timestamp("updated_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+  sellerId: text("seller_id")
+    .notNull()
+    .references(() => usersTable.id),
+});
+
+export const auctionsPriceTable = pgTable("auctionsPrice", {
+  id: uuid("id").defaultRandom().primaryKey().notNull(),
+  price: varchar("price").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  auctionId: uuid("auction_id")
+    .notNull()
+    .references(() => auctionsTable.id),
+  buyerId: text("buyer_id")
+    .notNull()
+    .references(() => usersTable.id),
+});
+
 export const userRelations = relations(usersTable, ({ many }) => ({
   posts: many(postsTable),
+  auctions: many(auctionsTable),
 }));
 
 export const postRelations = relations(postsTable, ({ one }) => ({
@@ -54,3 +84,23 @@ export const postRelations = relations(postsTable, ({ one }) => ({
     references: [usersTable.id],
   }),
 }));
+
+export const auctionRelations = relations(auctionsTable, ({ one, many }) => ({
+  user: one(usersTable, {
+    fields: [auctionsTable.sellerId],
+    references: [usersTable.id],
+  }),
+  bids: many(auctionsPriceTable), 
+}));
+
+export const auctionsPriceRelations = relations(auctionsPriceTable, ({ one }) => ({
+  auction: one(auctionsTable, {
+    fields: [auctionsPriceTable.auctionId],
+    references: [auctionsTable.id],
+  }),
+  buyer: one(usersTable, {
+    fields: [auctionsPriceTable.buyerId],
+    references: [usersTable.id],
+  }),
+}));
+

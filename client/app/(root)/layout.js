@@ -29,7 +29,7 @@ export default function RootLayout({ children }) {
         <AppProvider>
           <body className={`${merriweather.className}`}>
             <Navbar />
-            <div className="mt-[20px]">{children}</div>
+            <div className="">{children}</div>
           </body>
         </AppProvider>
       </html>

@@ -35,7 +35,7 @@ const Products = ({ title, products }) => {
 
   return (
     <section className="w-full">
-      <div className="bg-[#fed16a] py-[5px] my-[10px]">
+      <div className="bg-[#38664470] py-[5px] my-[10px]">
         <h3 className="text-center font-bold uppercase text-[#386641]">
           {title}
         </h3>
@@ -50,7 +50,7 @@ const Products = ({ title, products }) => {
           </div>
         </div>
       )}
-      <div className="w-full grid lg:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-[10px]">
+      <div className="w-full grid lg:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-[10px] sm:px-[30px] px-[15px]">
         {(categoryProducts.length > 0 ? categoryProducts : products)?.map(
           (product) => {
             return <ProductCard key={product.id} product={product} />;

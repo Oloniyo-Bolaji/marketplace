@@ -7,7 +7,7 @@ import React from "react";
 const ProductCard = ({ product }) => {
   const router = useRouter();
   return (
-    <div className="w-full flex flex-col gap-[5px] shadow-[2px_2px_3px_#ccc] rounded-[10px] bg-white p-[10px]">
+    <div className="w-full flex flex-col gap-[5px] shadow-[1px_1px_1px_#f97a00] rounded-[10px] bg-white p-[10px]">
       <div className="relative w-full h-[200px]">
         {product.images[0] && <Image
           src={product.images[0]}
@@ -31,7 +31,7 @@ const ProductCard = ({ product }) => {
         </h3>
         <button
           onClick={() => router.push(`product/${product.id}`)}
-          className="text-[12px] border border-[#386641] border-solid p-[5px] rounded-[5px] text-[#386641]"
+          className="text-[12px] border border-[#386641] border-solid hover:bg-[#386641] hover:text-white p-[5px] rounded-[5px] text-[#386641]"
         >
           Preview
         </button>

@@ -74,6 +74,62 @@ const sortType = [
       alert("Error submitting application");
     }
   };
+
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+<div className="relative w-[30%]">
+        <Image
+          src={product.images[0]}
+          alt={product.title}
+          fill
+          priority
+          className="object-contain"
+        />
+      </div>
+      <div className="flex flex-col gap-[5px]">
+        <h3 className="uppercase text-[12px] font-bold">{product.title}</h3>
+        <span className="font-bold text-[14px] text-[#f97a00]">
+          {" "}
+          &#8358;{product.price}
+        </span>
+        <div className="flex gap-[5px] items-center justify-between">
+          <label className="font-bold text-[13px]">Starts</label>
+          <div className="flex gap-[5px]">
+            <span className="w-[20px] h-[20px] text-[12px] text-white bg-[#386644] flex-center font-bold">
+              {formatSingleTime(startTimeLeft.hours)}
+            </span>
+            <span className="w-[20px] h-[20px] text-[12px] text-white bg-[#386644] flex-center font-bold">
+              {formatSingleTime(startTimeLeft.minutes)}
+            </span>
+            <span className="w-[20px] h-[20px] text-[12px] text-white bg-[#386644] flex-center font-bold">
+              {formatSingleTime(startTimeLeft.seconds)}
+            </span>
+          </div>
+        </div>
+        {/*<div className="flex gap-[5px] items-center justify-between">
+          <label className="font-bold text-[13px]">Ends</label>
+          <div className="flex gap-[5px]">
+            <span className="w-[20px] h-[20px] text-[12px] text-white bg-[#386644] flex-center font-bold">
+              {formatSingleTime(endTimeLeft.hours)}
+            </span>
+            <span className="w-[20px] h-[20px] text-[12px] text-white bg-[#386644] flex-center font-bold">
+              {formatSingleTime(endTimeLeft.minutes)}
+            </span>
+            <span className="w-[20px] h-[20px] text-[12px] text-white bg-[#386644] flex-center font-bold">
+              {formatSingleTime(endTimeLeft.seconds)}
+            </span>
+          </div>
+        </div>*/}
+        <div className="flex">
+          <button
+            onClick={() => router.push(`auction/${product.id}`)}
+            className="text-[12px] border border-[#386641] border-solid hover:bg-[#386641] hover:text-white p-[5px] rounded-[5px] text-[#386641"
+          >
+            Check Auction
+          </button>
+        </div>
+      </div>
+
   
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 

@@ -14,7 +14,7 @@ export async function POST(req) {
       price: data.price,
       bidPrice: data.bidPrice,
       startTime: new Date(data.startTime),
-      durationMinutes: data.durationMinutes,
+      endTime: new Date(data.endTime),
       description: data.description,
       images: data.images,
       status: data.status,

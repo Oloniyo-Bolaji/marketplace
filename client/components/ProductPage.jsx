@@ -8,21 +8,15 @@ import "swiper/css/navigation";
 import Image from "next/image";
 import { IoIosSend, IoMdArrowBack } from "react-icons/io";
 import { useRouter } from "next/navigation";
+import { formatTime } from "@/lib/formatDateTime";
+import { formatDate } from "@/lib/formatDateTime";
+
 
 const Product = ({ product }) => {
   const router = useRouter();
   const [sellersPosts, setSellersPosts] = useState([]);
 
-  const formatDateTime = (isoDate) => {
-    const date = new Date(isoDate);
-    const time = date.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-    const day = date.toLocaleDateString("en-GB");
-    return `Posted at ${time} on ${day}`;
-  };
-
+ 
   useEffect(() => {
     if (!product?.user?.id) return;
 
@@ -136,7 +130,7 @@ const Product = ({ product }) => {
         </div>
         <div>
           <h2 className="text-[#38664170] text-[12px]">
-            {formatDateTime(product.createdAt)}
+            {`Posted at ${formatDate(product.createdAt)} on ${formatTime(product.createdAt)}`}
           </h2>
         </div>
         <div className="w-full">

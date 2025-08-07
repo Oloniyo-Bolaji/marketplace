@@ -60,7 +60,7 @@ const Home = () => {
     <div className="text-black">
       <Header />
       <Announcement />
-      <main className="p-[30px] flex flex-col gap-[20px]">
+      <main className="flex flex-col gap-[20px]">
         {/**Auction products */}
         <Auctions products={auctionPosts}/>
         {/**New products */}

@@ -23,10 +23,10 @@ const auctionSchema = z.object({
     .string()
     .min(1, "Start time is required")
     .refine((val) => !isNaN(Date.parse(val)), "Invalid date and time format"),
-  durationMinutes: z
-    .number()
-    .min(1, "Duration must be at least 1 minute")
-    .max(10080, "Duration must be less than 7 days"),
+  endTime: z
+    .string()
+    .min(1, "End time is required")
+    .refine((val) => !isNaN(Date.parse(val)), "Invalid date and time format"),
   status: z
     .enum(["true", "false"])
     .transform((val) => val === "true")
@@ -53,26 +53,34 @@ const AuctionFormPage = () => {
       alert("Please log in to post a product");
       return;
     }
+
     if (!data.images || data.images.length === 0) {
-      alert(
-        "Please add at least one image to post a product, Click on upload images button"
-      );
+      alert("Please add at least one image to post a product.");
       return;
     }
+
     setIsLoading(true);
+
     try {
+      const formattedData = {
+        ...data,
+        price: Number(data.price.replace(/,/g, "")),
+        startTime: new Date(data.startTime).toISOString(),
+        endTime: new Date(data.endTime).toISOString(),
+      };
+
       const res = await fetch("/api/auctions/new", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          data,
+          data: formattedData,
           sellerId: user.user.id,
         }),
       });
+
       const result = await res.json();
       if (result.success) {
-        setIsLoading(true);
-        alert("posted successfully!");
+        alert("Posted successfully!");
         router.push("/");
       } else {
         throw new Error(result.error || "Something went wrong");
@@ -124,15 +132,13 @@ const AuctionFormPage = () => {
           <p className="text-[red] text-[12px]">{errors.startTime?.message}</p>
         </div>
         <div className="w-full flex flex-col gap-[5px]">
-          <label className="label">Durations</label>
+          <label className="label">End Time</label>
           <input
+            type="datetime-local"
             className="input placeholder:text-[13px]"
-            {...register("durationMinutes", { valueAsNumber: true })}
-            placeholder="Duration in minutes"
+            {...register("endTime")}
           />
-          <p className="text-[red] text-[12px]">
-            {errors.durationMinutes?.message}
-          </p>
+          <p className="text-[red] text-[12px]">{errors.endTime?.message}</p>
         </div>
         <div className="w-full flex flex-col gap-[5px]">
           <label className="label">Images</label>

@@ -50,7 +50,7 @@ export const auctionsTable = pgTable("auctions", {
   price: varchar("price").notNull(),
   bidPrice: varchar("bidPrice"),
   startTime: timestamp("start_time").notNull(),
-  durationMinutes: integer("duration_minutes").notNull(),
+  endTime: timestamp("endTime").notNull(),
   description: varchar("description", { length: 1000 }).notNull(),
   images: jsonb("images").notNull(),
   status: boolean("status").default(false),
@@ -90,17 +90,19 @@ export const auctionRelations = relations(auctionsTable, ({ one, many }) => ({
     fields: [auctionsTable.sellerId],
     references: [usersTable.id],
   }),
-  bids: many(auctionsPriceTable), 
+  bids: many(auctionsPriceTable),
 }));
 
-export const auctionsPriceRelations = relations(auctionsPriceTable, ({ one }) => ({
-  auction: one(auctionsTable, {
-    fields: [auctionsPriceTable.auctionId],
-    references: [auctionsTable.id],
-  }),
-  buyer: one(usersTable, {
-    fields: [auctionsPriceTable.buyerId],
-    references: [usersTable.id],
-  }),
-}));
-
+export const auctionsPriceRelations = relations(
+  auctionsPriceTable,
+  ({ one }) => ({
+    auction: one(auctionsTable, {
+      fields: [auctionsPriceTable.auctionId],
+      references: [auctionsTable.id],
+    }),
+    buyer: one(usersTable, {
+      fields: [auctionsPriceTable.buyerId],
+      references: [usersTable.id],
+    }),
+  })
+);

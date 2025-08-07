@@ -26,7 +26,7 @@ const Navbar = () => {
   const user = useUser();
 
   return (
-    <nav className="w-full h-[50px] flex justify-between items-center bg-[#386644] p-[30px]">
+    <nav className="w-full h-[50px] flex justify-between items-center  p-[30px]">
       <div>
         <Link
           href="/"
@@ -51,7 +51,7 @@ const Navbar = () => {
         <IconTooltip
           title="Explore"
           icon={
-            <FaShop className="w-5 h-5 text-white hover:text-orange-400 transition-colors duration-200" />
+            <FaShop className="w-5 h-5 text-[#386644] hover:text-orange-400 transition-colors duration-200" />
           }
           link="/explore"
         />
@@ -59,7 +59,7 @@ const Navbar = () => {
         <IconTooltip
           title="Artisans"
           icon={
-            <MdBuild className="w-5 h-5 text-white hover:text-orange-400 transition-colors duration-200" />
+            <MdBuild className="w-5 h-5 text-[#386644] hover:text-orange-400 transition-colors duration-200" />
           }
           link="/artisans"
         />
@@ -68,7 +68,7 @@ const Navbar = () => {
           <IconBadge
             title="Orders"
             icon={
-              <FaMessage className="w-5 h-5 text-white hover:text-orange-400 transition-colors duration-200" />
+              <FaMessage className="w-5 h-5 text-[#386644] hover:text-orange-400 transition-colors duration-200" />
             }
             link="/orders"
           />
@@ -86,7 +86,7 @@ const Navbar = () => {
         <SignedOut>
           <Link
             href="/sign-up"
-            className="text-white hover:text-orange-400 transition-colors duration-200"
+            className="text-[#386644] hover:text-orange-400 transition-colors duration-200"
           >
             <FaUserAlt className="w-5 h-5" />
           </Link>
